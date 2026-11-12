@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="pt-BR"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GRC Saúde | Autogestão</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font:15px system-ui;color:#182e36;background:#f3f6f5;display:grid;grid-template-columns:238px 1fr;min-height:100vh}aside{background:#102f34;color:#e4f2ed;padding:30px 19px}aside strong{font-size:22px}aside p{color:#afcec5;margin:6px 0 30px}nav{display:grid;gap:6px}button,input{font:inherit}button{cursor:pointer;border:1px solid #cbdad5;background:white;border-radius:8px;padding:9px 13px;color:#173c36}nav button{text-align:left;background:transparent;color:inherit;border-color:transparent}nav button[aria-current=true],nav button:hover{background:#24544e}main{padding:32px clamp(20px,4vw,60px);min-width:0}header{display:flex;justify-content:space-between;gap:12px;align-items:center;border-bottom:1px solid #d7e2dd;padding-bottom:16px}small,.muted{color:#526863}.tag{display:inline-block;border-radius:20px;background:#e0eee7;color:#235746;padding:5px 10px;font-size:12px;font-weight:700}h1{font-size:clamp(30px,4vw,50px);letter-spacing:-.05em;margin:27px 0 6px}h2{margin:0 0 12px;font-size:20px}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:13px;margin:24px 0}.card,.panel{background:white;border:1px solid #dce6e1;border-radius:13px;padding:20px}.card strong{display:block;font-size:31px;margin:6px 0}.red{color:#9d3028}.panel{margin:16px 0}.table{overflow:auto}table{border-collapse:collapse;width:100%;text-align:left}td,th{padding:12px 10px;border-bottom:1px solid #e1e9e4;vertical-align:top}th{font-size:13px;color:#526863}label{display:block;margin:10px 0}input{padding:8px;border:1px solid #b5c9c1;border-radius:7px;max-width:100%}button:focus-visible,input:focus-visible{outline:3px solid #429f84;outline-offset:2px}dialog{width:min(660px,92vw);border:1px solid #cbdad5;border-radius:14px;padding:24px;color:inherit}dialog::backdrop{background:#102f3499}li{margin:8px 0}@media(max-width:720px){body{display:block}aside{padding:16px}aside p{margin-bottom:12px}nav{display:flex;overflow:auto}nav button{white-space:nowrap}main{padding:20px}}
+</style>
+<aside><strong>GRC Saúde</strong><p>Autogestão · Governança e Auditoria</p><nav aria-label="Módulos"></nav></aside>
+<main><header><span class="muted">Operadora demonstrativa · Outubro de 2026</span><span class="tag">Dados simulados</span></header><h1 id="title"></h1><p id="intro" class="muted"></p><div id="content"></div></main>
+<dialog id="detail"><form method="dialog"><button>Fechar</button></form><div id="bodyDetail"></div></dialog>
+<script>
+const $=s=>document.querySelector(s);
+const modules=['Painel executivo','Riscos e apetite','Controles e evidências','Auditoria interna','Planos de ação','Obrigações e incidentes','Cenários e dados','Melhorias propostas','Monitoramento ERP'];
+const rows=[
+['R-01','Atraso na resposta a NIPs','Jurídicos e regulatórios','Ouvidoria','4×5','3×4',8,'C-01','T-01','A-01'],
+['R-02','Pressão de liquidez','Financeiros e atuariais','Tesouraria','4×5','2×4',8,'C-02','T-02',''],
+['R-03','Falha na trilha de autorização','Operacionais e rede','Autorizações','4×4','3×3',9,'C-03','T-03',''],
+['R-04','Atraso na coordenação assistencial','Assistenciais','Gestão assistencial','3×5','2×4',8,'C-04','',''],
+['R-05','Acesso indevido a dados de saúde','Dados, modelos e tecnologia','Segurança da informação','4×5','2×5',8,'C-05','',''],
+['R-06','Interrupção de prestador crítico','ESG, reputação e SST','Gestão de rede','3×4','2×3',8,'C-06','','']
+];
+const controls=[
+['C-01','Fila de NIPs e dupla revisão diária','Ouvidoria','E-01 · Extrato mensal anonimizado','Parcialmente eficaz'],
+['C-02','Conciliação e projeção de caixa semanal','Tesouraria','E-02 · Conciliação assinada','Eficaz'],
+['C-03','Reconciliação de autorizações com trilha de aprovação','Autorizações','E-03 · Log anonimizado','Eficaz'],
+['C-04','Revisão de casos com prazo assistencial crítico','Gestão assistencial','Pendente','Sem teste'],
+['C-05','Revisão de acessos privilegiados','Segurança da informação','Pendente','Sem teste'],
+['C-06','Validação de plano de continuidade de prestadores','Gestão de rede','Pendente','Sem teste']
+];
+const tests=[
+['T-01','C-01','Desenho e operação','50 registros simulados','3 desvios de escalonamento','A-01'],
+['T-02','C-02','Operação','4 conciliações semanais','Sem exceções na amostra',''],
+['T-03','C-03','Operação','30 autorizações simuladas','Sem exceções na amostra','']
+];
+const kpis=[
+['KRI-01','NIPs fora do prazo','31 / 500','6,2%','5,0% · limite interno fictício','Acima do limite','Ouvidoria','R-01'],
+['KRI-02','Sinistralidade','84 / 100','84,0%','85,0% · alerta interno fictício','Dentro do limite','Atuária','R-02'],
+['KPI-01','Controles testados','3 / 6','50,0%','80,0% · meta interna fictícia','Abaixo da meta','Auditoria interna','R-03'],
+['KRI-03','Atraso no atendimento assistencial','—','—','A definir','Sem dados','Gestão assistencial','R-04']
+];
+const action=['A-01','T-01','Automatizar escalonamento e revisar alertas','Ouvidoria','20/11/2026','Reexecutar o teste em 50 registros do ciclo seguinte'];
+const score=x=>x.split('×').map(Number).reduce((a,b)=>a*b);
+const risks=rows.map(r=>[r[0],r[1],r[2],r[3],score(r[4]),score(r[5]),r[6],score(r[5])>r[6]?'Fora do apetite':'Dentro do apetite']);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let current=0, exportRows, exportHeaders;
+const link=s=>/^(R|C|T|A)-\d+$/.test(s)?'<button data-id="'+s+'">'+s+'</button>':esc(s||s===0?s:'—');
+function table(headers,data,exportable=true){
+ if(exportable){exportRows=data;exportHeaders=headers}
+ return '<div class="table"><table><thead><tr>'+headers.map(h=>'<th scope="col">'+esc(h)+'</th>').join('')+'</tr></thead><tbody>'+data.map(r=>'<tr>'+r.map(v=>'<td>'+link(v)+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>';
+}
+const riskHeads=['ID','Risco','Domínio','Responsável','Inerente','Residual','Apetite','Situação'];
+const panel=(title,body)=>'<section class="panel"><h2>'+title+'</h2>'+body+'</section>';
+function show(i){
+ current=i;exportRows=null;$('#title').textContent=modules[i];
+ document.querySelectorAll('nav button').forEach((b,j)=>b.setAttribute('aria-current',j===i));
+ $('#intro').textContent=['Prioridades para diretoria e conselho','Matriz 5×5 com exposição residual e limite por risco','Controle, evidência e resultado de teste','Asseguração independente e acompanhamento de recomendações','Responsáveis, prazos e critérios de encerramento','Aplicabilidade, prazos e tratamento de incidentes','Simulação de liquidez e governança das informações','Diagnóstico do portal atual e sequência de implantação','Execute controles sobre dados sintéticos ou consulte o adaptador ERP local'][i];
+ let html='';
+ if(i===0){
+ const cards=[['Fora do apetite',risks.filter(r=>r[5]>r[6]).length,'Riscos com residual acima do limite'],['Controles testados',tests.length+'/'+controls.length,'Cobertura do catálogo demonstrativo'],['Indicadores em desvio',kpis.filter(r=>/^(Acima|Abaixo)/.test(r[5])).length,'KRI e KPI fora do parâmetro'],['Sem dados',kpis.filter(r=>r[5]==='Sem dados').length,'Exige verificação da fonte']];
+ html='<div class="cards">'+cards.map(c=>'<div class="card"><small>'+c[0]+'</small><strong>'+c[1]+'</strong><small>'+c[2]+'</small></div>').join('')+'</div>'+panel('Prioridade executiva','<p class="red">NIPs fora do prazo em 6,2% perante limite interno simulado de 5,0%.</p><p>Ouvidoria · '+link('R-01')+' '+link('A-01')+'</p>')+panel('Indicadores do período',table(['ID','Indicador','Base','Valor','Parâmetro','Situação','Fonte responsável','Risco'],kpis));
+ }
+ if(i===1)html=panel('Registro de riscos','<label>Filtrar por risco, domínio ou responsável <input id="filter" type="search"></label>'+table(riskHeads,risks))+'<p class="muted">O residual é reavaliado pela gestão após considerar os controles e a evidência disponível. Riscos acima do apetite requerem tratamento ou aceite formal pela alçada competente.</p>';
+ if(i===2)html=panel('Matriz de controles',table(['ID','Controle','Executor · 1ª linha','Referência da evidência','Avaliação simulada'],controls))+'<p class="muted">Em produção, versionar período, origem, responsável, classificação de acesso e revisão da evidência. A 2ª linha monitora e questiona a avaliação da gestão.</p>';
+ if(i===3)html=panel('Testes do ciclo',table(['ID','Controle','Escopo','Amostra','Resultado','Ação'],tests)) + panel('Plano baseado em riscos','<p>Priorizar NIPs e acessos privilegiados considerando risco residual, lacunas de asseguração e criticidade. Registrar universo, objetivo, população, critério de amostragem, papéis de trabalho e revisão.</p><p>A Auditoria Interna reporta ao órgão de governança e verifica a implementação das recomendações conforme o plano de acompanhamento.</p>');
+ if(i===4)html=panel('Ações em acompanhamento',table(['ID','Teste','Entrega','Responsável','Prazo','Critério de reteste','Estado'],[[...action,'Em execução']]))+panel('Encerramento','<p>Gestão envia evidência de implementação. Auditoria verifica o reteste da recomendação e registra a conclusão. Aceite de risco residual segue a alçada competente.</p>');
+ if(i===5)html=panel('Matriz de obrigações',table(['Referência','Objeto','Responsável','Verificação de aplicabilidade'],[['RN ANS 518/2022','Práticas mínimas de governança, controles internos e gestão de riscos para fins de solvência','Compliance','Confirmar versão vigente, artigo, porte e requisitos aplicáveis'],['LGPD e regulamentação ANPD','Tratamento de dados de saúde e incidentes de segurança','Encarregado','Avaliar impacto, necessidade de comunicação e prazo aplicável'],['Regras ANS de NIP','Tratamento de demandas e prazos aplicáveis','Ouvidoria','Controlar prazo por demanda e tipo, com trilha de resposta']]))+panel('Fluxo de incidentes','<p>Registrar ocorrência → conter → classificar impacto → avaliar dever de comunicação → tratar causa → verificar eficácia. Acesso restrito às evidências.</p>');
+ if(i===6)html=panel('Estresse de caixa em 30 dias','<p>Valores simulados em R$ milhões. Caixa inicial 45, entradas 30 e despesas de base 35.</p><label>Aumento de despesas <input id="stress" type="range" min="0" max="50" value="15"> <output id="percent"></output></label><p id="result" aria-live="polite"></p><small>Choque determinístico. Para CFaR, calibrar a distribuição dos fluxos, horizonte, confiança e testar aderência histórica.</small>')+panel('Governança dos dados e modelos','<p>Registrar origem, competência, regra de cálculo e reconciliação dos indicadores. Exibir falha de carga e dado desatualizado. Separar métricas internas, gatilhos de apetite e indicadores oficiais do IDSS.</p><p>Monitorar completude do TISS, conciliação com os sistemas de origem e desempenho dos modelos. Registrar versões, viés, deriva, revisão humana e decisão de suspensão.</p>');
+ if(i===7)html=panel('Mudanças prioritárias',table(['Prioridade','Tema','Proposta','Critério de aceite'],[
+ ['P0','Painel atual','Os contadores zerados coexistiam com um alerta de NIP de 6,2%. Usar uma fonte única e mostrar ausência, atraso ou falha de carga.','Alerta e contadores coincidem por período e filtro.'],
+ ['P0','Limites','O painel chamava 5,0% de teto regulatório. Exigir base normativa e vigência antes de usar esse rótulo.','Cada limite informa origem, aplicabilidade e aprovador.'],
+ ['P0','Alegações de conformidade','Revisar rótulos de homologação e alertas enviados.','Declarações dependem de comprovação e notificações exibem registro de entrega.'],
+ ['P1','Rastreabilidade','Vincular obrigação, risco, controle, evidência, teste, achado, ação e reteste.','Conselho consegue abrir a cadeia a partir de um indicador.'],
+ ['P1','Três Linhas e LGPD','Implantar perfis, segregação de funções, versionamento e trilha auditável no servidor.','Execução, revisão e asseguração têm responsáveis e permissões distintos.'],
+ ['P2','Dados e monitoramento','Pilotar conciliações e regras contínuas em NIP e TISS antes de escalar para cenários e IA.','Regras têm responsável, evidência de execução e fila de exceções.']
+ ]))+panel('Sequência de implantação','<ol><li>Primeiros 30 dias · reconciliar fontes, revisar limites e corrigir estados vazios.</li><li>Até 60 dias · pilotar a cadeia de evidências e reteste em NIP.</li><li>Até 90 dias · implantar segregação, reporte ao conselho e piloto de monitoramento contínuo.</li></ol>');
+ if(i===8)html=ccmView();
+ $('#content').innerHTML=html+(exportRows?'<button id="csv">Exportar tabela CSV</button>':'');
+ if(i===1)$('#filter').oninput=e=>{const q=e.target.value.toLocaleLowerCase('pt-BR');exportRows=risks.filter(r=>r.join(' ').toLocaleLowerCase('pt-BR').includes(q));document.querySelectorAll('tbody tr').forEach((tr,j)=>tr.hidden=!exportRows.includes(risks[j]));};
+ if(i===6){const update=()=>{const v=Number($('#stress').value), cash=45+30-35*(1+v/100);$('#percent').textContent=v+'%';$('#result').textContent='Caixa final projetado · '+cash.toLocaleString('pt-BR',{style:'currency',currency:'BRL'})+' milhões';};$('#stress').oninput=update;update();}
+ if(i===8)bindCcm();
+ if(exportRows)$('#csv').onclick=download;
+}
+function download(){
+ const quote=v=>{let s=String(v??'');if(/^[=+\-@\t\r]/.test(s))s="'"+s;return '"'+s.replaceAll('"','""')+'"';};
+ const csv='\ufeff'+[exportHeaders,...exportRows].map(r=>r.map(quote).join(';')).join('\r\n');
+ const url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download=modules[current]+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function detail(id){
+ const r=rows.find(r=>r[0]===id||r.slice(7).includes(id));if(!r)return;
+ const c=controls.find(c=>c[0]===r[7]),t=tests.find(t=>t[0]===r[8]);
+ $('#bodyDetail').innerHTML='<h2>'+esc(r[0]+' · '+r[1])+'</h2><ol><li>Obrigações de referência · '+esc(r[0]==='R-01'?'Regras ANS de NIP e governança de controles':'Governança de riscos e controles · RN 518/2022')+'</li><li>Risco residual '+score(r[5])+' perante apetite '+r[6]+'</li><li>'+esc(c[0]+' · '+c[1])+'</li><li>Evidência · '+esc(c[3])+'</li><li>Teste · '+esc(t?t[0]+' · '+t[4]:'A programar')+'</li>'+(r[9]?'<li>'+esc(action[0]+' · '+action[2])+'<br>Reteste · '+esc(action[5])+'</li>':'')+'</ol>';
+ $('#detail').showModal();
+}
+document.addEventListener('click',e=>{const button=e.target.closest('[data-id]');if(button)detail(button.dataset.id);});
+modules.forEach((m,i)=>{const b=document.createElement('button');b.textContent=m;b.onclick=()=>show(i);$('nav').append(b);});
+const rules=[
+ ['CCM-01','nips','R-01','C-01','NIP respondida após o prazo ou vencida sem resposta',(r,asOf)=>r.respondidaEm?r.respondidaEm>r.prazo:asOf>r.prazo],
+ ['CCM-02','caixa','R-02','C-02','Diferença na conciliação acima de R$ 1,00 (parâmetro demo)',r=>Math.abs(r.erp-r.banco)>1],
+ ['CCM-03','autorizacoes','R-03','C-03','Autorização concluída sem referência de aprovação',r=>r.concluida&&!r.aprovacao],
+ ['CCM-04','tiss','R-03','C-03','Lote TISS rejeitado e sem reprocessamento aceito',r=>r.status==='Rejeitado'&&!r.reprocessado]
+];
+const fixture={
+ nips:[{id:'NIP-101',prazo:'2026-10-08',respondidaEm:'2026-10-09'},{id:'NIP-102',prazo:'2026-10-12',respondidaEm:'2026-10-11'}],
+ caixa:[{id:'CX-101',erp:12500,banco:12300},{id:'CX-102',erp:5000,banco:5000}],
+ autorizacoes:[{id:'AUT-101',concluida:true,aprovacao:''},{id:'AUT-102',concluida:true,aprovacao:'AP-102'}],
+ tiss:[{id:'LT-101',status:'Rejeitado',reprocessado:false},{id:'LT-102',status:'Aceito',reprocessado:false}]
+};
+const validDate=v=>typeof v==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(v)&&Number.isFinite(Date.parse(v))&&new Date(v).toISOString().slice(0,10)===v;
+const checks={
+ nips:r=>validDate(r.prazo)&&(r.respondidaEm===null||validDate(r.respondidaEm)),
+ caixa:r=>Number.isFinite(r.erp)&&Number.isFinite(r.banco),
+ autorizacoes:r=>typeof r.concluida==='boolean'&&typeof r.aprovacao==='string',
+ tiss:r=>['Aceito','Rejeitado'].includes(r.status)&&typeof r.reprocessado==='boolean'
+};
+let history=[], queue=[], events=[], busy=false, timer=null, source='demo', competence='2026-10';
+const runHead=['Execução','Horário UTC','Origem','Competência','Regra','Processados','Exceções','Resultado'];
+const queueHead=['Exceção','Regra','Registro','Risco','Controle','Responsável','Situação','Última execução'];
+function ccmView(){
+ return panel('Conector de leitura','<label>Competência <input id="period" type="month" value="'+competence+'" required></label><label>Origem <select id="source"><option value="demo">Simulação no navegador</option><option value="api">API local /api/erp/v1</option></select></label><button id="run" '+(busy?'disabled':'')+'>Executar controles</button> <button id="schedule">'+(timer?'Pausar':'Executar a cada 60 s')+'</button><p id="ccmStatus" role="status">'+(busy?'Execução em andamento':'Consulta somente leitura. O agendamento requer a página aberta.')+'</p>')+
+ panel('Catálogo de regras',table(['Regra','Fonte','Risco','Controle','Critério'],rules.map(r=>r.slice(0,5)),false))+
+ panel('Fila de exceções',table(queueHead,queue,false)+'<label>Exceção <select id="exception"><option value="">Selecione</option>'+queue.filter(r=>r[6]!=='Encaminhada').map(r=>'<option>'+esc(r[0])+'</option>').join('')+'</select></label><button id="assign">Encaminhar ao responsável</button> <button id="exportQueue">Exportar fila CSV</button>')+
+ panel('Histórico de execuções',table(runHead,history,false)+'<button id="exportRuns">Exportar execuções CSV</button>')+
+ panel('Trilha da sessão',table(['Horário UTC','Evento','Objeto'],events,false)+'<p class="muted">Fila e histórico em memória. Os resultados deste módulo são independentes do painel histórico demonstrativo.</p>');
+}
+function refreshCcm(){if(current===8)show(8);}
+function exportCcm(headers,data){exportHeaders=headers;exportRows=data;download();}
+function bindCcm(){
+ $('#source').value=source;
+ $('#source').onchange=e=>{source=e.target.value;};
+ $('#period').oninput=e=>{if(/^\d{4}-\d{2}$/.test(e.target.value))competence=e.target.value;};
+ $('#run').onclick=runCcm;
+ $('#schedule').onclick=()=>{if(timer){clearInterval(timer);timer=null;refreshCcm();}else{timer=setInterval(runCcm,60000);runCcm();}};
+ $('#assign').onclick=()=>{const r=queue.find(row=>row[0]===$('#exception').value);if(r){r[6]='Encaminhada';events.unshift([new Date().toISOString(),'Encaminhamento registrado na fila',r[0]]);refreshCcm();}};
+ $('#exportQueue').onclick=()=>exportCcm(queueHead,queue);
+ $('#exportRuns').onclick=()=>exportCcm(runHead,history);
+}
+async function readDataset(mode,resource,period){
+ if(mode==='demo')return {competencia:period,referencia:period+'-28',registros:period==='2026-10'?fixture[resource]:[]};
+ const response=await fetch('/api/erp/v1/'+resource+'?competencia='+encodeURIComponent(period),{signal:AbortSignal.timeout(8000),cache:'no-store',headers:{Accept:'application/json'}});
+ if(!response.ok)throw Error('HTTP '+response.status);
+ return response.json();
+}
+async function runCcm(){
+ if(busy)return;
+ if(current===8&&!$('#period').reportValidity())return;
+ busy=true;
+ const timestamp=new Date().toISOString(), run='EXEC-'+String(history.length/rules.length+1).padStart(3,'0'), mode=source, period=competence;
+ refreshCcm();
+ try{
+ const results=await Promise.all(rules.map(async ([id,resource,risk,control,criterion,evaluate])=>{
+  try{
+   const data=await readDataset(mode,resource,period), list=data.registros;
+   if(data.competencia!==period||!validDate(data.referencia)||!data.referencia.startsWith(period+'-')||!Array.isArray(list)||list.some(r=>!r||typeof r.id!=='string'||!/^[A-Za-z0-9_-]{1,80}$/.test(r.id)||!checks[resource](r))||new Set(list.map(r=>r.id)).size!==list.length)throw Error('Contrato inválido');
+   const exceptions=list.filter(r=>evaluate(r,data.referencia));
+   for(const item of exceptions){
+    const key=[mode,period,id,item.id].join('/'), existing=queue.find(r=>r[0]===key);
+    if(existing)existing[7]=run;
+    else queue.push([key,id,item.id,risk,control,rows.find(r=>r[0]===risk)[3],'Aberta',run]);
+   }
+   return [run,timestamp,mode,period,id,list.length,exceptions.length,list.length?(exceptions.length?'Com exceções':'Sem exceções'):'Sem dados'];
+  }catch(err){return [run,timestamp,mode,period,id,'—','—','Falha de leitura ou validação · '+err.message];}
+ }));
+ history.unshift(...results);
+ events.unshift([timestamp,'Execução registrada',run]);
+ }finally{busy=false;refreshCcm();}
+}
+
+show(0);
+</script>
+</html>
